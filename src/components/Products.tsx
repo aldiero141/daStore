@@ -72,7 +72,9 @@ const createCategoryFilter = () => {
 };
 
 export default function Products({ isPage }: { isPage: boolean }) {
+  //eslint-disable-next-line
   const [search, setSearch] = useState("");
+  //eslint-disable-next-line
   const [filter, setFilter] = useState("");
 
   // Filter Categories
