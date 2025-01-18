@@ -1,0 +1,7 @@
+.banner-container {
+  @apply hidden lg:inline md:inline relative h-96 max-h-[500px] px-5 mx-auto mt-5 max-w-7xl w-full lg:mt-6;
+}
+
+.banner-card-content {
+  @apply flex h-96 max-h-[500px] p-0;
+}
