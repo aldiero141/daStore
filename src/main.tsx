@@ -7,9 +7,9 @@ import Home from "./app/home/index.tsx";
 import Products from "./app/home/products.tsx";
 import Dashboard from "./app/dashboard/index.tsx";
 
-import DashboardUsers from "./components/Dashboard/Users";
-import DashboardCategories from "./components/Dashboard/Categories";
-import DashboardProducts from "./components/Dashboard/Products";
+import DashboardUsers from "./components/Dashboard/Users/index.tsx";
+import DashboardCategories from "./components/Dashboard/Categories/index.tsx";
+import DashboardProducts from "./components/Dashboard/Products/index.tsx";
 
 const router = createBrowserRouter([
   {

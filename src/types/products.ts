@@ -16,6 +16,7 @@ export interface IRating {
 export interface IProductStore {
     products: Array<IProduct>;
     addProduct: (newProduct: IProduct) => void;
+    removeProduct: (id: number) => void;
     updateProduct: (newProducts: Array<IProduct>) => void;
     removeAllProducts: () => void;
   }
@@ -23,6 +24,7 @@ export interface IProductStore {
 export interface ICategoryStore {
     categories: string[];
     addCategory: (newCategory: string) => void;
+    removeCategory: (id: number) => void;
     updateCategory: (newCategories: Array<string>) => void;
     removeAllCategory: () => void;
 }
