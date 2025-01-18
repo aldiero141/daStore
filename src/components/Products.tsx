@@ -60,7 +60,12 @@ const createCategoryFilter = () => {
   const updateCategories = CategoryStore((state) => state.updateCategory);
   updateCategories(dummyCategories);
 
-  const categoryFilter = [];
+  const categoryFilter = [
+    {
+      value: "all",
+      label: "All",
+    },
+  ];
   for (let i = 0; i < categories.length; i++) {
     categoryFilter.push({
       value: categories[i],
@@ -72,14 +77,11 @@ const createCategoryFilter = () => {
 };
 
 export default function Products({ isPage }: { isPage: boolean }) {
-  //eslint-disable-next-line
   const [search, setSearch] = useState("");
-  //eslint-disable-next-line
   const [filter, setFilter] = useState("");
 
   // Filter Categories
   const categoryFilterOptions = createCategoryFilter();
-  console.log(categoryFilterOptions);
 
   // Search and Filter
   const handleSearch = (search: string, filter: string) => {
@@ -96,6 +98,9 @@ export default function Products({ isPage }: { isPage: boolean }) {
           filterOptions={categoryFilterOptions}
         />
       )}
+      <div>search: {search}</div>
+      <div>filter: {filter}</div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 place-items-center">
         {createProductCards()}
       </div>
