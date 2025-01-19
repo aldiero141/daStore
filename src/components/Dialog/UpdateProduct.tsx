@@ -32,9 +32,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CategoryStore } from "@/store/CategoryStore";
-import { dummyCategories, dummyProduct } from "@/lib/dummydata";
+import { dummyCategories } from "@/lib/dummydata";
 import { UpdateDialogStore } from "@/store/UpdateDialogStore";
 import { useEffect } from "react";
+import { updateProduct } from "@/api/products";
+import { useMutation } from "@tanstack/react-query";
+import { ProductStore } from "@/store/ProductStore";
 
 const formSchema = z.object({
   title: z.string().min(2).max(255),
@@ -58,6 +61,10 @@ const formSchema = z.object({
 export function UpdateProduct({ confirm }: { confirm: () => void }) {
   const isOpenUpdate = UpdateDialogStore((state) => state.isOpen);
   const setOpenUpdate = UpdateDialogStore((state) => state.setOpenDialog);
+  const itemData = UpdateDialogStore((state) => state.dialogData);
+
+  const products = ProductStore((state) => state.products);
+  const updateProducts = ProductStore((state) => state.updateProduct);
 
   const categories = CategoryStore((state) => state.categories);
   if (categories.length === 0) {
@@ -76,25 +83,48 @@ export function UpdateProduct({ confirm }: { confirm: () => void }) {
     },
   });
 
-  // Fill the form with dummy data
+  // Fill the form with item data
   useEffect(() => {
     if (!isOpenUpdate) return;
-
+    const itemDataParse = JSON.parse(itemData);
     const remapValues = {
-      ...dummyProduct,
-      price: Number(dummyProduct.price),
+      title: itemDataParse.title,
+      price: Number(itemDataParse.price),
+      description: itemDataParse.description,
+      image: itemDataParse.image,
+      category: itemDataParse.category,
     };
     form.reset(remapValues);
-  }, [form, isOpenUpdate]);
+  }, [form, isOpenUpdate, itemData]);
+
+  const { mutateAsync: updateCurrentProduct } = useMutation({
+    mutationFn: updateProduct,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["users"] }); // refetch users on success
+      confirm();
+      form.reset();
+      setOpenUpdate(false);
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    const itemDataParse = JSON.parse(itemData);
+    updateCurrentProduct({
+      data: { ...values, price: values.price.toString() },
+      id: itemDataParse.id,
+    });
 
-    // WIP : format the image
-    console.log(values);
-    confirm();
-    setOpenUpdate(false);
+    const reMapProducts = products.map((product) => {
+      if (product.id === itemDataParse.id) {
+        return {
+          ...product,
+          ...values,
+          price: values.price.toString(),
+        };
+      }
+      return product;
+    });
+    updateProducts(reMapProducts);
   }
 
   return (

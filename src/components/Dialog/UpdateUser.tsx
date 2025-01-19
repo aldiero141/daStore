@@ -22,9 +22,11 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { dummyUser } from "@/lib/dummydata";
 import { UpdateDialogStore } from "@/store/UpdateDialogStore";
 import { useEffect } from "react";
+import { updateUser } from "@/api/users";
+import { useMutation } from "@tanstack/react-query";
+import { UserStore } from "@/store/UserStore";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -50,6 +52,10 @@ const formSchema = z.object({
 export function UpdateUser({ confirm }: { confirm: () => void }) {
   const isOpenUpdate = UpdateDialogStore((state) => state.isOpen);
   const setOpenUpdate = UpdateDialogStore((state) => state.setOpenDialog);
+  const itemData = UpdateDialogStore((state) => state.dialogData);
+
+  const users = UserStore((state) => state.users);
+  const updateUsers = UserStore((state) => state.updateUsers);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,19 +81,60 @@ export function UpdateUser({ confirm }: { confirm: () => void }) {
     },
   });
 
-  // Fill the form with dummy data
+  // Fill the form with item data
   useEffect(() => {
-    if (isOpenUpdate) form.reset(dummyUser);
+    if (!isOpenUpdate) return;
+    const itemDataParse = JSON.parse(itemData);
+    const remapValues = {
+      email: itemDataParse.email,
+      username: itemDataParse.username,
+      password: itemDataParse.password,
+      name: {
+        firstname: itemDataParse.name.firstname,
+        lastname: itemDataParse.name.lastname,
+      },
+      address: {
+        city: itemDataParse.address.city,
+        street: itemDataParse.address.street,
+        number: itemDataParse.address.number,
+        zipcode: itemDataParse.address.zipcode,
+        geolocation: {
+          lat: "-37.3159",
+          long: "81.1496",
+        },
+      },
+      phone: itemDataParse.phone,
+    };
+    form.reset(remapValues);
   }, [form, isOpenUpdate]);
+
+  const { mutateAsync: updateCurrentUser } = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["users"] }); // refetch users on success
+      confirm();
+      form.reset();
+      setOpenUpdate(false);
+    },
+  });
 
   // Submit update
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
-    console.log(values);
-    confirm();
-    setOpenUpdate(false);
+    const itemDataParse = JSON.parse(itemData);
+    updateCurrentUser({
+      data: values,
+      id: itemDataParse.id,
+    });
+    const reMapUsers = users.map((user) => {
+      if (user.id === itemDataParse.id) {
+        return {
+          ...user,
+          ...values,
+        };
+      }
+      return user;
+    });
+    updateUsers(reMapUsers);
   }
 
   return (

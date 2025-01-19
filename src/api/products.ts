@@ -11,6 +11,14 @@ interface IGetProducts {
 interface IPostProduct {
   data: IProduct;
 };
+interface IUpdateProduct {
+  data: IProduct;
+  id: number;
+};
+
+interface IDeleteProduct {
+  id: number;
+};
 
 
 export async function getProducts(filters?: IGetProducts) {
@@ -42,7 +50,22 @@ export async function postProduct(payload: IPostProduct) {
   const url = 'https://fakestoreapi.com/products'
 
   const response = await axios.post(url, payload.data );
-  if(response.status !== 200) throw new Error("Failed to fetch products");
-  console.log(response.data)
+  if(response.status !== 200) throw new Error("Failed to add product");
+  return response.data as IProduct[];
+}
+
+export async function updateProduct(payload: IUpdateProduct) {
+  const url = `https://fakestoreapi.com/products/${payload.id}`
+
+  const response = await axios.put(url, payload.data );
+  if(response.status !== 200) throw new Error("Failed to update product");
+  return response.data as IProduct[];
+}
+
+export async function deleteProduct(payload: IDeleteProduct) {
+  const url = `https://fakestoreapi.com/products/${payload.id}`
+
+  const response = await axios.delete(url);
+  if(response.status !== 200) throw new Error("Failed to delete product");
   return response.data as IProduct[];
 }

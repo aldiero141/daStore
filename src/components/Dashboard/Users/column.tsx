@@ -50,7 +50,7 @@ export const columns: ColumnDef<IUser>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="Capitalize">
+      <div className="capitalize">
         {row.original.name.firstname} {row.original.name.lastname}
       </div>
     ),
@@ -76,8 +76,16 @@ export const columns: ColumnDef<IUser>[] = [
   {
     header: "Adress",
     id: "address",
-    accessorFn: (row) =>
-      `${row.address.city} No ${row.address.number}, ${row.address.city}, ${row.address.zipcode}`,
+    accessorKey: "adress",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div className="capitalize">
+          {user.address.street} No {user.address.number}, {user.address.city},{" "}
+          {user.address.zipcode}
+        </div>
+      );
+    },
   },
   {
     header: "Actions",
