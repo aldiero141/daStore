@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Eraser, PenLine } from "lucide-react";
 import { DeleteDialogStore } from "@/store/DeleteDialogStore";
+import { UpdateDialogStore } from "@/store/UpdateDialogStore";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -19,7 +20,7 @@ import { DeleteDialogStore } from "@/store/DeleteDialogStore";
 export const columns: ColumnDef<string>[] = [
   {
     id: "index",
-    header: "ID",
+    header: "Index",
     cell: ({ row }) => `${row.index + 1} `,
   },
   {
@@ -35,6 +36,7 @@ export const columns: ColumnDef<string>[] = [
     cell: ({ row }) => {
       const category = row;
 
+      // Handle Dialog Delete
       const setOpenDialog = DeleteDialogStore((state) => state.setOpenDialog);
       const setDialogName = DeleteDialogStore((state) => state.setDialogName);
       const setDialogData = DeleteDialogStore((state) => state.setDialogData);
@@ -43,6 +45,23 @@ export const columns: ColumnDef<string>[] = [
         setOpenDialog(true);
         setDialogName("category");
         setDialogData(JSON.stringify(category));
+      };
+
+      // Handle Dialog Update
+      const setOpenUpdateDialog = UpdateDialogStore(
+        (state) => state.setOpenDialog
+      );
+      const setDialogNameUpdate = UpdateDialogStore(
+        (state) => state.setDialogName
+      );
+      const setDialogDataUpdate = UpdateDialogStore(
+        (state) => state.setDialogData
+      );
+
+      const openUpdateDialog = () => {
+        setOpenUpdateDialog(true);
+        setDialogNameUpdate("category");
+        setDialogDataUpdate(JSON.stringify(category));
       };
 
       return (
@@ -71,7 +90,10 @@ export const columns: ColumnDef<string>[] = [
               <Eraser />
               Delete Category
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-blue-700 cursor-pointer">
+            <DropdownMenuItem
+              className="text-blue-700 cursor-pointer"
+              onClick={() => openUpdateDialog()}
+            >
               <PenLine />
               Update Category
             </DropdownMenuItem>

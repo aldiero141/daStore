@@ -8,6 +8,7 @@ import { UserStore } from "@/store/UserStore";
 import { Input } from "@/components/ui/input";
 import { CreateUser } from "@/components/Dialog/CreateUser";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
+import { UpdateUser } from "@/components/Dialog/UpdateUser";
 
 export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
@@ -21,9 +22,14 @@ export default function DashboardUsers() {
   const confirmDelete = () => {
     console.log("delete");
   };
+
+  const confirmUpdate = () => {
+    console.log("updated");
+  };
   return (
     <div>
       <DeleteConfirmation confirm={confirmDelete} />
+      <UpdateUser confirm={confirmUpdate} />
       <h2 className="text-2xl font-semibold">Users List</h2>
       <p className="text-gray-500">list of all users in the system</p>
 

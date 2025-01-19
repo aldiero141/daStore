@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Eraser, PenLine, ArrowUpDown } from "lucide-react";
 import { DeleteDialogStore } from "@/store/DeleteDialogStore";
+import { UpdateDialogStore } from "@/store/UpdateDialogStore";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -85,6 +86,7 @@ export const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const user = row.original;
 
+      // Handle Dialog Delete
       const setOpenDialog = DeleteDialogStore((state) => state.setOpenDialog);
       const setDialogName = DeleteDialogStore((state) => state.setDialogName);
       const setDialogData = DeleteDialogStore((state) => state.setDialogData);
@@ -93,6 +95,23 @@ export const columns: ColumnDef<IUser>[] = [
         setOpenDialog(true);
         setDialogName("user");
         setDialogData(JSON.stringify(user));
+      };
+
+      //Handle Dialog Update
+      const setOpenUpdateDialog = UpdateDialogStore(
+        (state) => state.setOpenDialog
+      );
+      const setDialogNameUpdate = UpdateDialogStore(
+        (state) => state.setDialogName
+      );
+      const setDialogDataUpdate = UpdateDialogStore(
+        (state) => state.setDialogData
+      );
+
+      const openUpdateDialog = () => {
+        setOpenUpdateDialog(true);
+        setDialogNameUpdate("user");
+        setDialogDataUpdate(JSON.stringify(user));
       };
       return (
         <DropdownMenu>
@@ -118,7 +137,10 @@ export const columns: ColumnDef<IUser>[] = [
               <Eraser />
               Delete User
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-blue-700 cursor-pointer">
+            <DropdownMenuItem
+              className="text-blue-700 cursor-pointer"
+              onClick={() => openUpdateDialog()}
+            >
               <PenLine />
               Update User
             </DropdownMenuItem>

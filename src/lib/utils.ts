@@ -16,3 +16,14 @@ export const formatCurrency = (value: number, numFormat: string = 'en-US', curre
   })
   return currencyValue.format(value)
 }
+
+export const  getBase64Image = (img: HTMLImageElement) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  // eslint-disable-next-line prefer-const
+  let ctx = canvas.getContext("2d");
+  ctx?.drawImage(img, 0, 0);
+  const dataURL = canvas.toDataURL("image/png");
+  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+}

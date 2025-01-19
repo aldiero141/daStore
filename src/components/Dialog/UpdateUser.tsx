@@ -8,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -19,12 +18,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Pencil } from "lucide-react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { dummyUser } from "@/lib/dummydata";
+import { UpdateDialogStore } from "@/store/UpdateDialogStore";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -47,8 +47,9 @@ const formSchema = z.object({
   phone: z.string().min(2).max(50),
 });
 
-export function CreateUser() {
-  const [open, setOpen] = useState(false);
+export function UpdateUser({ confirm }: { confirm: () => void }) {
+  const isOpenUpdate = UpdateDialogStore((state) => state.isOpen);
+  const setOpenUpdate = UpdateDialogStore((state) => state.setOpenDialog);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,26 +75,28 @@ export function CreateUser() {
     },
   });
 
+  // Fill the form with dummy data
+  useEffect(() => {
+    if (isOpenUpdate) form.reset(dummyUser);
+  }, [form, isOpenUpdate]);
+
+  // Submit update
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
     console.log(values);
-    setOpen(false);
+    confirm();
+    setOpenUpdate(false);
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="ml-auto">
-          <Pencil /> Add New User
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpenUpdate} onOpenChange={setOpenUpdate}>
       <DialogContent className="overflow-y-scroll max-h-[calc(100vh-100px)] p-8">
         <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
+          <DialogTitle>Update User</DialogTitle>
           <DialogDescription>
-            Add new user here. Click save when you're done.
+            Update existing user here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

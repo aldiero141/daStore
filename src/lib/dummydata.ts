@@ -169,3 +169,34 @@ export const dummyUsers = [
         phone:'1-570-236-7033'
     },
 ]
+
+export const dummyUser = { 
+    id:1,
+    email:'dumdum@gmail.com',
+    username:'dumdum',
+    password:'m38rmF$',
+    name:{
+        firstname:'Dummy',
+        lastname:'Dumbo'
+    },
+    address:{
+        city:'Dumland',
+        street:'7770 Dummy Dom',
+        number:4,
+        zipcode:'12345-678',
+        geolocation:{
+            lat:'-37.3159',
+            long:'81.1496'
+        }
+    },
+    phone:'1-1234-456-879'
+}
+
+export const dummyProduct = 
+{
+    title:'Dummy Items',
+    price:'0',
+    category:'electronics',
+    description:'this is dummy item',
+    image:'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+}

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
 import { CreateProduct } from "@/components/Dialog/CreateProduct";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
+import { UpdateProduct } from "@/components/Dialog/UpdateProduct";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
@@ -18,12 +19,17 @@ export default function DashboardProducts() {
   }
 
   const confirmDelete = () => {
-    console.log("delete");
+    console.log("deleted");
+  };
+
+  const confirmUpdate = () => {
+    console.log("updated");
   };
 
   return (
     <div>
       <DeleteConfirmation confirm={confirmDelete} />
+      <UpdateProduct confirm={confirmUpdate} />
       <h2 className="text-2xl font-semibold">Products List</h2>
       <p className="text-gray-500">list of all products sold in the system</p>
 
