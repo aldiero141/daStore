@@ -1,14 +1,15 @@
 // import React from "react";
-import { dummyCategories } from "@/lib/dummydata";
 import { CategoryStore } from "@/store/CategoryStore";
 import { columns } from "./column";
 import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { CreateCategory } from "@/components/Dialog/CreateCategory";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 import { UpdateCategory } from "@/components/Dialog/UpdateCategory";
 import { DeleteDialogStore } from "@/store/DeleteDialogStore";
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/api/products";
 
 export default function DashboardCategories() {
   const [filterValue, setFilterValue] = useState("");
@@ -17,7 +18,17 @@ export default function DashboardCategories() {
 
   const categories = CategoryStore((state) => state.categories);
   const updateCategories = CategoryStore((state) => state.updateCategory);
-  if (categories.length === 0) updateCategories(dummyCategories);
+
+  // Fetch Categories
+  const { data, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => await getCategories(),
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    updateCategories(data as string[]);
+  }, [data]);
 
   const confirmDelete = () => {
     const data = JSON.parse(deleteDialogData);
@@ -33,7 +44,7 @@ export default function DashboardCategories() {
       <UpdateCategory confirm={confirmUpdate} />
       <h2 className="text-2xl font-semibold">Categories List</h2>
       <p className="text-gray-500">
-        list of all category for all products in the system
+        List of all category for all products in the system
       </p>
 
       <div className="container mx-auto py-10">
@@ -49,6 +60,7 @@ export default function DashboardCategories() {
           <CreateCategory />
         </div>
         <DataTable
+          isLoading={isLoading}
           columns={columns}
           data={categories}
           filterColumn="name"

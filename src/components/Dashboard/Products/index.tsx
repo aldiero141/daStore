@@ -41,7 +41,7 @@ export default function DashboardProducts() {
       <DeleteConfirmation confirm={confirmDelete} />
       <UpdateProduct confirm={confirmUpdate} />
       <h2 className="text-2xl font-semibold">Products List</h2>
-      <p className="text-gray-500">list of all products sold in the system</p>
+      <p className="text-gray-500">List of all products sold in the system</p>
 
       <div className="container mx-auto py-10">
         <div className="flex items-center py-4 gap-2">
