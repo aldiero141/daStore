@@ -31,6 +31,7 @@ import {
   // useQueryClient
 } from "@tanstack/react-query";
 import { UserStore } from "@/store/UserStore";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -56,6 +57,8 @@ const formSchema = z.object({
 export function CreateUser() {
   // const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+
   const updateUsers = UserStore((state) => state.updateUsers);
   const users = UserStore((state) => state.users);
 
@@ -87,6 +90,11 @@ export function CreateUser() {
     mutationFn: postUser,
     onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["users"] }); // refetch users on success
+      toast({
+        toastType: "success",
+        title: "Post Success !",
+        description: "User has been added successfully",
+      });
     },
   });
 

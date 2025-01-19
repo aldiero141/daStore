@@ -12,6 +12,7 @@ import DashboardUsers from "./components/Dashboard/Users/index.tsx";
 import DashboardCategories from "./components/Dashboard/Categories/index.tsx";
 import DashboardProducts from "./components/Dashboard/Products/index.tsx";
 import ErrorPage404 from "./404.tsx";
+import { Toaster } from "./components/ui/toaster.tsx";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster />
     </QueryClientProvider>
   </StrictMode>
 );

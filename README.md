@@ -1,4 +1,4 @@
-#### Introduction
+## Introduction
 
 Home page of the e-commerce website.
 https://da-store.vercel.app/

@@ -39,6 +39,7 @@ import { dummyCategories } from "@/lib/dummydata";
 import { ProductStore } from "@/store/ProductStore";
 import { useMutation } from "@tanstack/react-query";
 import { postProduct } from "@/api/products";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -62,6 +63,8 @@ const formSchema = z.object({
 export function CreateProduct() {
   // const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+
   const products = ProductStore((state) => state.products);
   const updateProducts = ProductStore((state) => state.updateProduct);
 
@@ -86,6 +89,11 @@ export function CreateProduct() {
     mutationFn: postProduct,
     onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["products"] }); // refetch users on success
+      toast({
+        toastType: "success",
+        title: "Post Success !",
+        description: "Product has been added successfully",
+      });
     },
   });
 

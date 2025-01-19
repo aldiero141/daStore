@@ -11,9 +11,11 @@ import { deleteProduct, getProducts } from "@/api/products";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { IProduct } from "@/types/products";
 import { DeleteDialogStore } from "@/store/DeleteDialogStore";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
+  const { toast } = useToast();
 
   const products = ProductStore((state) => state.products);
   const updateProducts = ProductStore((state) => state.updateProduct);
@@ -35,6 +37,11 @@ export default function DashboardProducts() {
     mutationFn: deleteProduct,
     onSuccess: () => {
       // queryClient.invalidateQueries({ queryKey: ["products"] }); // refetch users on success
+      toast({
+        toastType: "success",
+        title: "Delete Success !",
+        description: "Product has been deleted successfully",
+      });
     },
   });
 
@@ -46,7 +53,11 @@ export default function DashboardProducts() {
   };
 
   const confirmUpdate = () => {
-    console.log("updated");
+    toast({
+      toastType: "success",
+      title: "Update Success !",
+      description: "Product has been updated successfully",
+    });
   };
 
   return (

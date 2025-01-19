@@ -10,9 +10,11 @@ import { UpdateCategory } from "@/components/Dialog/UpdateCategory";
 import { DeleteDialogStore } from "@/store/DeleteDialogStore";
 import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "@/api/products";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DashboardCategories() {
   const [filterValue, setFilterValue] = useState("");
+  const { toast } = useToast();
 
   const deleteDialogData = DeleteDialogStore((state) => state.dialogData);
 
@@ -34,9 +36,18 @@ export default function DashboardCategories() {
     const data = JSON.parse(deleteDialogData);
     const newCategory = categories.filter((val) => val !== data.original);
     updateCategories(newCategory);
+    toast({
+      toastType: "success",
+      title: "Delete Success !",
+      description: "Category has been deleted successfully",
+    });
   };
   const confirmUpdate = () => {
-    console.log("updated");
+    toast({
+      toastType: "success",
+      title: "Update Success !",
+      description: "Category has been updated successfully",
+    });
   };
   return (
     <div>
