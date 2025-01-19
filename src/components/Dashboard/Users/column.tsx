@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Eraser, PenLine, ArrowUpDown } from "lucide-react";
+import { DeleteDialogStore } from "@/store/DeleteDialogStore";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -84,6 +85,15 @@ export const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const user = row.original;
 
+      const setOpenDialog = DeleteDialogStore((state) => state.setOpenDialog);
+      const setDialogName = DeleteDialogStore((state) => state.setDialogName);
+      const setDialogData = DeleteDialogStore((state) => state.setDialogData);
+
+      const openDeleteDialog = () => {
+        setOpenDialog(true);
+        setDialogName("user");
+        setDialogData(JSON.stringify(user));
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -101,7 +111,10 @@ export const columns: ColumnDef<IUser>[] = [
               Copy User ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-700 cursor-pointer">
+            <DropdownMenuItem
+              className="text-red-700 cursor-pointer"
+              onClick={() => openDeleteDialog()}
+            >
               <Eraser />
               Delete User
             </DropdownMenuItem>

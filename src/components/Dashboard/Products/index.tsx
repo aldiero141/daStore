@@ -6,6 +6,7 @@ import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
 import { CreateProduct } from "@/components/Dialog/CreateProduct";
+import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
@@ -16,8 +17,13 @@ export default function DashboardProducts() {
     updateProducts(dummyProducts);
   }
 
+  const confirmDelete = () => {
+    console.log("delete");
+  };
+
   return (
     <div>
+      <DeleteConfirmation confirm={confirmDelete} />
       <h2 className="text-2xl font-semibold">Products List</h2>
       <p className="text-gray-500">list of all products sold in the system</p>
 

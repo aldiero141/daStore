@@ -6,6 +6,7 @@ import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
 import { CreateCategory } from "@/components/Dialog/CreateCategory";
+import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 
 export default function DashboardCategories() {
   const [filterValue, setFilterValue] = useState("");
@@ -16,8 +17,12 @@ export default function DashboardCategories() {
     updateCategories(dummyCategories);
   }
 
+  const confirmDelete = () => {
+    console.log("delete");
+  };
   return (
     <div>
+      <DeleteConfirmation confirm={confirmDelete} />
       <h2 className="text-2xl font-semibold">Categories List</h2>
       <p className="text-gray-500">
         list of all category for all products in the system

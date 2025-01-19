@@ -7,6 +7,7 @@ import { dummyUsers } from "@/lib/dummydata";
 import { UserStore } from "@/store/UserStore";
 import { Input } from "@/components/ui/input";
 import { CreateUser } from "@/components/Dialog/CreateUser";
+import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 
 export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
@@ -16,8 +17,13 @@ export default function DashboardUsers() {
     const updateUsers = UserStore((state) => state.updateUsers);
     updateUsers(dummyUsers);
   }
+
+  const confirmDelete = () => {
+    console.log("delete");
+  };
   return (
     <div>
+      <DeleteConfirmation confirm={confirmDelete} />
       <h2 className="text-2xl font-semibold">Users List</h2>
       <p className="text-gray-500">list of all users in the system</p>
 
