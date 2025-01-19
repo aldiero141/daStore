@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 
 interface SearchAndFilterProps {
   onSearch: (search: string, filter: string) => void;
@@ -22,8 +24,15 @@ export function SearchAndFilter({
   onSearch,
   filterOptions,
 }: SearchAndFilterProps) {
-  const [search, setSearch] = React.useState("");
-  const [filter, setFilter] = React.useState(filterOptions[0].value);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState(filterOptions[0].value);
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    setSearch(searchParams.get("q") || "");
+    setFilter(searchParams.get("f") || "");
+  }, [searchParams]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

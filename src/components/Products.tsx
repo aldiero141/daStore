@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { ProductStore } from "@/store/ProductStore";
 import { CategoryStore } from "@/store/CategoryStore";
@@ -6,6 +6,7 @@ import { dummyCategories, dummyProducts } from "@/lib/dummydata";
 import CategoryCards from "./CategoryCards";
 import { SearchAndFilter } from "./SearchAndFilter";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { useSearchParams } from "react-router";
 
 const createProductCards = () => {
   const products = ProductStore((state) => state.products);
@@ -80,13 +81,21 @@ export default function Products({ isPage }: { isPage: boolean }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   // Filter Categories
   const categoryFilterOptions = createCategoryFilter();
+
+  useEffect(() => {
+    setSearch(searchParams.get("q") || "");
+    setFilter(searchParams.get("f") || "");
+  }, [searchParams]);
 
   // Search and Filter
   const handleSearch = (search: string, filter: string) => {
     setSearch(search);
     setFilter(filter);
+    setSearchParams({ q: search, f: filter });
   };
 
   return (
