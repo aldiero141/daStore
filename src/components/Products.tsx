@@ -40,7 +40,7 @@ export default function Products({ isPage }: { isPage: boolean }) {
     setSearchParams({ q: search, f: filter });
   };
 
-  //Fetch Products
+  // Fetch Products
   const { data, isLoading } = useQuery({
     queryKey: ["products", filter],
     queryFn: async () => await getProducts({ filter, limit }),
@@ -54,9 +54,6 @@ export default function Products({ isPage }: { isPage: boolean }) {
 
     const filteredData = data.filter((product) => {
       if (search.toLowerCase() == "") return products;
-      console.log(search.toLowerCase());
-      console.log(product.title.toLowerCase());
-
       return product.title.toLowerCase().includes(search.toLowerCase());
     });
 

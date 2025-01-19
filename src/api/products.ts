@@ -10,9 +10,10 @@ interface IGetProducts {
 
 
 export async function getProducts(filters?: IGetProducts) {
-  // Do something cool with the filters
+  const filter = filters?.filter !== '' && filters?.filter !== 'all' ? filters?.filter : '';
+  const url = filter ? `https://fakestoreapi.com/products/category/${filter}` : "https://fakestoreapi.com/products";
 
-  const response = await axios.get(`https://fakestoreapi.com/products${filters?.filter !== '' && filters?.filter !== 'all' ? `/category/${filters?.filter}` : ""}`, {
+  const response = await axios.get(url, {
     params: {
       search: filters?.search,
       page: filters?.page,

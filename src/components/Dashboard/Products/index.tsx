@@ -1,22 +1,35 @@
 // import React from "react";
-import { dummyProducts } from "@/lib/dummydata";
 import { ProductStore } from "@/store/ProductStore";
 import { columns } from "./column";
 import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { CreateProduct } from "@/components/Dialog/CreateProduct";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 import { UpdateProduct } from "@/components/Dialog/UpdateProduct";
+import { getProducts } from "@/api/products";
+import { useQuery } from "@tanstack/react-query";
+import { IProduct } from "@/types/products";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
 
   const products = ProductStore((state) => state.products);
-  if (products.length === 0) {
-    const updateProducts = ProductStore((state) => state.updateProduct);
-    updateProducts(dummyProducts);
-  }
+  const updateProducts = ProductStore((state) => state.updateProduct);
+  // if (products.length === 0) {
+  //   updateProducts(dummyProducts);
+  // }
+
+  // Fetch Products
+  const { data, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => await getProducts(),
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    updateProducts(data as IProduct[]);
+  }, [data]);
 
   const confirmDelete = () => {
     console.log("deleted");
@@ -46,6 +59,7 @@ export default function DashboardProducts() {
           <CreateProduct />
         </div>
         <DataTable
+          isLoading={isLoading}
           columns={columns}
           data={products}
           filterColumn="name"
