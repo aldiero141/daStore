@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Search } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -40,9 +39,11 @@ export function SearchAndFilter({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex space-x-2 mt-4 mb-8">
-      <div className="relative flex-grow">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col lg:flex-row gap-4 mt-4 mb-8 justify-between"
+    >
+      <div className="flex flex-row w-full">
         <Input
           placeholder="Search..."
           value={search}
@@ -50,19 +51,21 @@ export function SearchAndFilter({
           className="pl-8"
         />
       </div>
-      <Select value={filter} onValueChange={setFilter}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Filter" />
-        </SelectTrigger>
-        <SelectContent>
-          {filterOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Button type="submit">Search</Button>
+      <div className="flex flex-row w-full m-0 flex-start justify-between lg:w-[30%] lg:justify-normal lg:gap-4">
+        <Select value={filter} onValueChange={setFilter}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter" />
+          </SelectTrigger>
+          <SelectContent>
+            {filterOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button type="submit">Search</Button>
+      </div>
     </form>
   );
 }
