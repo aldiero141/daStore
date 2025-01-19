@@ -6,8 +6,7 @@ import { columns } from "./column";
 import { dummyUsers } from "@/lib/dummydata";
 import { UserStore } from "@/store/UserStore";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { CreateUser } from "@/components/Dialog/CreateUser";
 
 export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
@@ -31,9 +30,7 @@ export default function DashboardUsers() {
             }
             className="w-full"
           />
-          <Button variant="outline" className="ml-auto">
-            <Pencil /> Add New Users
-          </Button>
+          <CreateUser />
         </div>
         <DataTable
           columns={columns}
