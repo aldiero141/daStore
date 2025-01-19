@@ -17,11 +17,11 @@ export default function CategoryCards() {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 place-items-center mt-2 mb-16">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8 place-items-center mt-2 mb-8 lg:mb-16">
       {categories.length > 0 &&
         categories.map((category, i) => (
           <Card
-            className="flex w-[200px] h-[80px] p-4 items-center justify-center  hover:shadow-lg hover:cursor-pointer capitalize  border-none"
+            className="flex w-[200px] h-[80px]  p-4 items-center justify-center  hover:shadow-lg hover:cursor-pointer capitalize  border-none"
             key={i}
             onClick={() => onNavigate(category)}
           >
