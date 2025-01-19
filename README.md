@@ -3,7 +3,7 @@
 Home page of the e-commerce website.
 https://da-store.vercel.app/
 
-Dashbaord of the e-commerce website.
+Dashboard of the e-commerce website.
 https://da-store.vercel.app/dashboard
 
 This is project created using React, Typescript and ShadcnUI. The home page is a e-commerce website that allows users to browse  products. It also has a dashboard where admins can view, add, update and delete the products, users, and categories.
