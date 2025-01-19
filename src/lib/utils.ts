@@ -31,3 +31,10 @@ export const  getBase64Image = (img: HTMLImageElement) => {
 export const truncateText = (text: string, count: number) => {
     return text.slice(0, count) + (text.length > count ? "..." : "");
 };
+
+export const splitPaginateArray = (array: unknown[], currentPage: number, pageSize: number) => {
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const totalPages = Math.ceil(array.length / pageSize);
+  return {endIndex, totalPages, array: array.slice(startIndex, startIndex + pageSize)};
+};

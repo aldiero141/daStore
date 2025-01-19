@@ -8,6 +8,7 @@ import { capitalizeFirstLetter, truncateText } from "@/lib/utils";
 import { useSearchParams } from "react-router";
 import { getProducts } from "@/api/products";
 import { useQuery } from "@tanstack/react-query";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -17,6 +18,7 @@ import {
 import { ProductStore } from "@/store/ProductStore";
 import { IProduct } from "@/types/products";
 import { Skeleton } from "./ui/skeleton";
+import { Button } from "./ui/button";
 
 export default function Products({ isPage }: { isPage: boolean }) {
   const [search, setSearch] = useState("");
@@ -60,6 +62,21 @@ export default function Products({ isPage }: { isPage: boolean }) {
     updateProducts(filteredData as IProduct[]);
   }, [data, search]);
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const handlePrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = products.slice(startIndex, endIndex);
+
   return (
     <div className="max-w-[70vw] my-8">
       {!isPage && <CategoryCards />}
@@ -95,8 +112,8 @@ export default function Products({ isPage }: { isPage: boolean }) {
       )}
       {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 place-items-center">
-          {products &&
-            products?.map((product, i) => (
+          {currentItems.length > 0 ? (
+            currentItems?.map((product, i) => (
               <Card
                 className="flex flex-col w-[280px] min-h-[360px] items-center p-4 justify-between hover:shadow-lg hover:cursor-pointer capitalize "
                 key={i}
@@ -126,7 +143,7 @@ export default function Products({ isPage }: { isPage: boolean }) {
                   <div className="flex flex-col items-end justify-end">
                     <p className="text-xl">${product.price}</p>
                     <p className="flex flex-row items-center gap-2 text-gray-500 text-sm font-medium">
-                      {product.rating.rate}
+                      {product?.rating?.rate}
 
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +161,36 @@ export default function Products({ isPage }: { isPage: boolean }) {
                   </div>
                 </div>
               </Card>
-            ))}
+            ))
+          ) : (
+            <div className="flex flex-col col-start-2 h-[50vh] justify-center items-center ">
+              <p className="text-center text-muted-foreground">
+                No products found
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isPage && (
+        <div className="flex justify-center items-center gap-8 mt-16">
+          <Button
+            variant="outline"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
+          </Button>
+          <div className="text-center text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>
