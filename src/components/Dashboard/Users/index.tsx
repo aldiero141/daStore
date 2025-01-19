@@ -12,9 +12,10 @@ export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
 
   const users = UserStore((state) => state.users);
-  const updateUsers = UserStore((state) => state.updateUsers);
-  updateUsers(dummyUsers);
-
+  if (users.length === 0) {
+    const updateUsers = UserStore((state) => state.updateUsers);
+    updateUsers(dummyUsers);
+  }
   return (
     <div>
       <h2 className="text-2xl font-semibold">Users List</h2>

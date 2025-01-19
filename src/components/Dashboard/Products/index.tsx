@@ -11,8 +11,10 @@ export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
 
   const products = ProductStore((state) => state.products);
-  const updateProducts = ProductStore((state) => state.updateProduct);
-  updateProducts(dummyProducts);
+  if (products.length === 0) {
+    const updateProducts = ProductStore((state) => state.updateProduct);
+    updateProducts(dummyProducts);
+  }
 
   return (
     <div>

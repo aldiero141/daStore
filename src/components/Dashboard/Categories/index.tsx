@@ -5,15 +5,16 @@ import { columns } from "./column";
 import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { CreateCategory } from "@/components/Dialog/CreateCategory";
 
 export default function DashboardCategories() {
   const [filterValue, setFilterValue] = useState("");
 
   const categories = CategoryStore((state) => state.categories);
-  const updateCategories = CategoryStore((state) => state.updateCategory);
-  updateCategories(dummyCategories);
+  if (categories.length === 0) {
+    const updateCategories = CategoryStore((state) => state.updateCategory);
+    updateCategories(dummyCategories);
+  }
 
   return (
     <div>
@@ -32,9 +33,7 @@ export default function DashboardCategories() {
             }
             className="w-full"
           />
-          <Button variant="outline" className="ml-auto">
-            <Pencil /> Add New Category
-          </Button>
+          <CreateCategory />
         </div>
         <DataTable
           columns={columns}
