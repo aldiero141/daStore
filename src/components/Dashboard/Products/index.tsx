@@ -16,9 +16,6 @@ export default function DashboardProducts() {
 
   const products = ProductStore((state) => state.products);
   const updateProducts = ProductStore((state) => state.updateProduct);
-  // if (products.length === 0) {
-  //   updateProducts(dummyProducts);
-  // }
 
   // Fetch Products
   const { data, isLoading } = useQuery({

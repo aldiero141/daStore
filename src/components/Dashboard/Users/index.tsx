@@ -1,23 +1,32 @@
 // import React from "react";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { DataTable } from "../DataTable";
 import { columns } from "./column";
-import { dummyUsers } from "@/lib/dummydata";
 import { UserStore } from "@/store/UserStore";
 import { Input } from "@/components/ui/input";
 import { CreateUser } from "@/components/Dialog/CreateUser";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 import { UpdateUser } from "@/components/Dialog/UpdateUser";
+import { useQuery } from "@tanstack/react-query";
+import { getUsers } from "@/api/users";
+import { IUser } from "@/types/users";
 
 export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
 
   const users = UserStore((state) => state.users);
-  if (users.length === 0) {
-    const updateUsers = UserStore((state) => state.updateUsers);
-    updateUsers(dummyUsers);
-  }
+  const updateUsers = UserStore((state) => state.updateUsers);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => await getUsers(),
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    updateUsers(data as IUser[]);
+  }, [data]);
 
   const confirmDelete = () => {
     console.log("delete");
@@ -46,6 +55,7 @@ export default function DashboardUsers() {
           <CreateUser />
         </div>
         <DataTable
+          isLoading={isLoading}
           columns={columns}
           data={users}
           filterColumn="email"

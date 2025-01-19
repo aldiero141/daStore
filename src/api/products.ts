@@ -24,3 +24,12 @@ export async function getProducts(filters?: IGetProducts) {
   return response.data as IProduct[];
   
 }
+
+export async function getCategories() {
+  const url = 'https://fakestoreapi.com/products/categories'
+
+  const response = await axios.get(url);
+  if(response.status !== 200) throw new Error("Failed to fetch products");
+  return response.data as string[];
+  
+}

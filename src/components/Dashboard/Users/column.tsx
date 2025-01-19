@@ -36,7 +36,7 @@ export const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => <div className="Capitalize">{row.original.id}</div>,
   },
   {
-    accessorKey: "name",
+    accessorKey: "name.firstname",
     id: "name",
     header: ({ column }) => {
       return (
