@@ -8,10 +8,10 @@ export default function LayoutDefault({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col w-full h-screen items-center">
+    <main className="flex flex-col w-full h-screen items-center">
       <Header />
       {children}
       <Footer />
-    </div>
+    </main>
   );
 }
