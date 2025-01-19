@@ -8,15 +8,18 @@ import { Input } from "@/components/ui/input";
 import { CreateUser } from "@/components/Dialog/CreateUser";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 import { UpdateUser } from "@/components/Dialog/UpdateUser";
-import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "@/api/users";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteUser, getUsers } from "@/api/users";
 import { IUser } from "@/types/users";
+import { DeleteDialogStore } from "@/store/DeleteDialogStore";
 
 export default function DashboardUsers() {
   const [filterValue, setFilterValue] = useState("");
 
   const users = UserStore((state) => state.users);
   const updateUsers = UserStore((state) => state.updateUsers);
+
+  const deleteDialogData = DeleteDialogStore((state) => state.dialogData);
 
   // Fetch Users
   const { data, isLoading } = useQuery({
@@ -29,8 +32,18 @@ export default function DashboardUsers() {
     updateUsers(data as IUser[]);
   }, [data]);
 
+  const { mutateAsync: deleteCurrentUser } = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["users"] }); // refetch users on success
+    },
+  });
+
   const confirmDelete = () => {
-    console.log("delete");
+    const data = JSON.parse(deleteDialogData);
+    const newUsers = users.filter((val) => val.id !== data.id);
+    deleteCurrentUser({ id: data.id });
+    updateUsers(newUsers);
   };
 
   const confirmUpdate = () => {

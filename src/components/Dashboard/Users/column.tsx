@@ -131,12 +131,12 @@ export const columns: ColumnDef<IUser>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => navigator.clipboard.writeText(user.id.toString())}
             >
               Copy User ID
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-red-700 cursor-pointer"

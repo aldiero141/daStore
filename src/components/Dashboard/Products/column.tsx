@@ -49,12 +49,12 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     header: "Rating",
     accessorKey: "rating.rate",
-    accessorFn: (row) => `${row.rating.rate}/5`,
+    accessorFn: (row) => `${row?.rating?.rate}/5`,
     cell: ({ row }) => {
       const product = row.original;
       return (
         <div className="flex items-center justify-center gap-1">
-          {product.rating.rate}/5
+          {product?.rating?.rate}/5
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -120,14 +120,14 @@ export const columns: ColumnDef<IProduct>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               className="cursor-pointer"
               onClick={() =>
                 navigator.clipboard.writeText(product.id.toString())
               }
             >
               Copy Product ID
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-red-700 cursor-pointer"

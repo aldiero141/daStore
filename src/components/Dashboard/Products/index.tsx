@@ -7,15 +7,18 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { CreateProduct } from "@/components/Dialog/CreateProduct";
 import { DeleteConfirmation } from "@/components/Dialog/DeleteConfirmation";
 import { UpdateProduct } from "@/components/Dialog/UpdateProduct";
-import { getProducts } from "@/api/products";
-import { useQuery } from "@tanstack/react-query";
+import { deleteProduct, getProducts } from "@/api/products";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { IProduct } from "@/types/products";
+import { DeleteDialogStore } from "@/store/DeleteDialogStore";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
 
   const products = ProductStore((state) => state.products);
   const updateProducts = ProductStore((state) => state.updateProduct);
+
+  const deleteDialogData = DeleteDialogStore((state) => state.dialogData);
 
   // Fetch Products
   const { data, isLoading } = useQuery({
@@ -28,8 +31,18 @@ export default function DashboardProducts() {
     updateProducts(data as IProduct[]);
   }, [data]);
 
+  const { mutateAsync: deleteCurrentUser } = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["products"] }); // refetch users on success
+    },
+  });
+
   const confirmDelete = () => {
-    console.log("deleted");
+    const data = JSON.parse(deleteDialogData);
+    const newProducts = products.filter((val) => val.id !== data.id);
+    deleteCurrentUser({ id: data.id });
+    updateProducts(newProducts);
   };
 
   const confirmUpdate = () => {
