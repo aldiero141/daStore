@@ -5,8 +5,7 @@ import { columns } from "./column";
 import { DataTable } from "../DataTable";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { CreateProduct } from "@/components/Dialog/CreateProduct";
 
 export default function DashboardProducts() {
   const [filterValue, setFilterValue] = useState("");
@@ -30,9 +29,7 @@ export default function DashboardProducts() {
             }
             className="w-full"
           />
-          <Button variant="outline" className="ml-auto">
-            <Pencil /> Add New Product
-          </Button>
+          <CreateProduct />
         </div>
         <DataTable
           columns={columns}

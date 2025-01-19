@@ -24,7 +24,7 @@ export interface IProductStore {
 export interface ICategoryStore {
     categories: string[];
     addCategory: (newCategory: string) => void;
-    removeCategory: (id: number) => void;
+    removeCategory: (categoryName: string) => void;
     updateCategory: (newCategories: Array<string>) => void;
     removeAllCategory: () => void;
 }
