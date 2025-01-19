@@ -27,3 +27,7 @@ export const  getBase64Image = (img: HTMLImageElement) => {
   const dataURL = canvas.toDataURL("image/png");
   return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
+
+export const truncateText = (text: string, count: number) => {
+    return text.slice(0, count) + (text.length > count ? "..." : "");
+};
