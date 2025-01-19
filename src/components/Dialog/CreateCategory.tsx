@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { CategoryStore } from "@/store/CategoryStore";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -33,6 +34,7 @@ const formSchema = z.object({
 
 export function CreateCategory() {
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
 
   const addCategory = CategoryStore((state) => state.addCategory);
 
@@ -47,6 +49,11 @@ export function CreateCategory() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     addCategory(values.name);
+    toast({
+      toastType: "success",
+      title: "Post Success !",
+      description: "Category has been added successfully",
+    });
     setOpen(false);
   }
 
