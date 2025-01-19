@@ -1,5 +1,6 @@
 import { Users, ShoppingCart, ChartBarStacked } from "lucide-react";
 import daStoreLogo from "@/assets/images/daStoreLogo.png";
+import { NavLink } from "react-router";
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +28,7 @@ export function AdminSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="flex items-center  gap-2" size="lg">
-              <a href="/dashboard/users">
+              <NavLink to="/dashboard/users">
                 <img
                   src={daStoreLogo}
                   alt="Logo"
@@ -36,7 +37,7 @@ export function AdminSidebar() {
                   className="mt-4"
                 />
                 <span className="sr-only">DaStore E-commerce</span>
-              </a>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -49,10 +50,10 @@ export function AdminSidebar() {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild>
-                    <a href={item.href}>
+                    <NavLink to={item.href}>
                       <item.icon className="h-5 w-5 mr-3" />
                       {item.label}
-                    </a>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

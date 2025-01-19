@@ -4,11 +4,8 @@ import { AdminSidebar } from "@/components/AdminSidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { AdminHeader } from "@/components/AdminHeader";
 import { Outlet } from "react-router";
-import { useNavigate } from "react-router";
 
 function Dashboard() {
-  const navigate = useNavigate();
-  navigate("/dashboard/users");
   return (
     <AdminLayout>
       <AdminSidebar />

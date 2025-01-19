@@ -47,7 +47,7 @@ export const columns: ColumnDef<string>[] = [
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() =>
-                navigator.clipboard.writeText(category.index.toString())
+                navigator.clipboard.writeText((category.index + 1).toString())
               }
             >
               Copy Category ID
