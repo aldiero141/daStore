@@ -36,27 +36,34 @@ import { z } from "zod";
 import { useState } from "react";
 import { CategoryStore } from "@/store/CategoryStore";
 import { dummyCategories } from "@/lib/dummydata";
+import { ProductStore } from "@/store/ProductStore";
+import { useMutation } from "@tanstack/react-query";
+import { postProduct } from "@/api/products";
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
   price: z.coerce.number().gte(1),
   description: z.string().min(8).max(50),
-  image: z
-    .instanceof(File, { message: "Please select an image" })
-    .refine(
-      (file) => file.size <= 5000000,
-      "Image size should be less than 5MB."
-    )
-    .refine(
-      (file) =>
-        ["image/jpeg", "image/png", "application/pdf"].includes(file.type),
-      "File type should be JPEG, PNG, or PDF."
-    ),
+  image: z.string().min(2),
+  // image: z
+  //   .instanceof(File, { message: "Please select an image" })
+  //   .refine(
+  //     (file) => file.size <= 5000000,
+  //     "Image size should be less than 5MB."
+  //   )
+  //   .refine(
+  //     (file) =>
+  //       ["image/jpeg", "image/png", "application/pdf"].includes(file.type),
+  //     "File type should be JPEG, PNG, or PDF."
+  //   ),
   category: z.string().min(2).max(50),
 });
 
 export function CreateProduct() {
+  // const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const products = ProductStore((state) => state.products);
+  const updateProducts = ProductStore((state) => state.updateProduct);
 
   const categories = CategoryStore((state) => state.categories);
   if (categories.length === 0) {
@@ -70,8 +77,15 @@ export function CreateProduct() {
       title: "",
       price: 0,
       description: "",
-      image: undefined,
+      image: "",
       category: "",
+    },
+  });
+
+  const { mutateAsync: postNewProduct } = useMutation({
+    mutationFn: postProduct,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["products"] }); // refetch users on success
     },
   });
 
@@ -79,8 +93,20 @@ export function CreateProduct() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
-    // WIP : format the image
-    console.log(values);
+    postNewProduct({ data: { ...values, price: values.price.toString() } });
+    updateProducts([
+      ...products,
+      {
+        ...values,
+        price: values.price.toString(),
+        id: products.length + 1,
+        rating: {
+          rate: 0,
+          count: 0,
+        },
+      },
+    ]);
+    form.reset();
     setOpen(false);
   }
 
@@ -148,6 +174,21 @@ export function CreateProduct() {
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>Copy image url here.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
                     <Input
                       type="file"
                       onChange={(e) => {
@@ -164,7 +205,7 @@ export function CreateProduct() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}

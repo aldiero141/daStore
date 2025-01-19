@@ -8,6 +8,9 @@ interface IGetUsers {
   limit?: number | null;
 };
 
+interface IPostUsers {
+  data: IUser;
+};
 
 export async function getUsers(filters?: IGetUsers) {
   const url = 'https://fakestoreapi.com/users'
@@ -21,5 +24,13 @@ export async function getUsers(filters?: IGetUsers) {
   });
   if(response.status !== 200) throw new Error("Failed to fetch products");
   return response.data as IUser[];
-  
+}
+
+export async function postUser(payload: IPostUsers) {
+  const url = 'https://fakestoreapi.com/users'
+
+  const response = await axios.post(url, payload.data );
+  if(response.status !== 200) throw new Error("Failed to fetch products");
+  console.log(response.data)
+  return response.data as IUser[];
 }

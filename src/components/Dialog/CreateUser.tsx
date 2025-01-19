@@ -25,6 +25,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
+import { postUser } from "@/api/users";
+import {
+  useMutation,
+  // useQueryClient
+} from "@tanstack/react-query";
+import { UserStore } from "@/store/UserStore";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -48,7 +54,10 @@ const formSchema = z.object({
 });
 
 export function CreateUser() {
+  // const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const updateUsers = UserStore((state) => state.updateUsers);
+  const users = UserStore((state) => state.users);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,11 +83,25 @@ export function CreateUser() {
     },
   });
 
+  const { mutateAsync: postNewUser } = useMutation({
+    mutationFn: postUser,
+    onSuccess: () => {
+      // queryClient.invalidateQueries({ queryKey: ["users"] }); // refetch users on success
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
-    console.log(values);
+    postNewUser({ data: values });
+    updateUsers([
+      ...users,
+      {
+        ...values,
+        id: users.length + 1,
+      },
+    ]);
+    form.reset();
     setOpen(false);
   }
 

@@ -8,6 +8,10 @@ interface IGetProducts {
   limit?: number | null;
 };
 
+interface IPostProduct {
+  data: IProduct;
+};
+
 
 export async function getProducts(filters?: IGetProducts) {
   const filter = filters?.filter !== '' && filters?.filter !== 'all' ? filters?.filter : '';
@@ -32,4 +36,13 @@ export async function getCategories() {
   if(response.status !== 200) throw new Error("Failed to fetch products");
   return response.data as string[];
   
+}
+
+export async function postProduct(payload: IPostProduct) {
+  const url = 'https://fakestoreapi.com/products'
+
+  const response = await axios.post(url, payload.data );
+  if(response.status !== 200) throw new Error("Failed to fetch products");
+  console.log(response.data)
+  return response.data as IProduct[];
 }
